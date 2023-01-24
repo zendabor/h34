@@ -37,21 +37,30 @@ router.post('/upload', async (req, res, next) => {
         await mkdir(upd)
     }
     form.uploadDir = upd;
-    form.parse(req);
-    form.on('fileSt',   function (file) {
-        const fileName = encodeURIComponent(file.name)
-        fs.renameSync(upd,path.join(upd,fileName))
-    })
-    res.render('pages/admin', { title: 'Admin page' })
+    const fileN = await new Promise((resolve, reject) => {
+        try {
+            form.parse(req,async (err, fields, files) => {
+                if (err) {
+                    throw err.message
+                }
+                await rename(files.photo.filepath,path.join(form.uploadDir, files.photo.originalFilename));
+                resolve({fileName:files.photo.originalFilename,...fields})
+            });
+        }catch (err){
+            if (err){
+                throw err.message
+            }
+        }
+    });
+    const filej = path.join(process.cwd(), 'data.json');
+    const json1 = await readFile(filej, 'utf-8');
+    const json2 = await JSON.parse(json1);
+    json2.products.push({src: path.join('./uploads',`./${fileN.fileName}`),name:fileN.name,price:fileN.price});
+    const json3 = JSON.stringify(json2);
+    await writeFile(filej, json3);
+    res.render('pages/admin', { title: 'Admin page' });
 })
 
 module.exports = router
 
 
-// const picName = path.join(upd,files.name)
-// console.log(picName)
-// await rename(files.path, picName)
-// // const file = path.join(process.cwd(), 'data.json');
-// // const json1 = await readFile(file, 'utf-8');
-// // const json2 = await JSON.parse(json1);
-// // json2.products.push({req.body.name, req.body.price, req.body.photo})
