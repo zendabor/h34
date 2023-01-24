@@ -31,16 +31,16 @@ router.post('/skills',  async (req, res, next) => {
 })
 
 router.post('/upload', async (req, res, next) => {
-    let form = new formidable.IncomingForm();
-    let upd = path.join('./public','updFiles')
+    const form = new formidable.IncomingForm();
+    const upd = path.join(process.cwd(),'uploads')
     if(!fs.existsSync(upd)){
         await mkdir(upd)
     }
-    form.uploadDir = path.join(process.cwd(),upd)
+    form.uploadDir = upd;
     form.parse(req);
     form.on('fileSt',   function (file) {
         const fileName = encodeURIComponent(file.name)
-        fs.renameSync(form.uploadDir,path.join(form.uploadDir,fileName))
+        fs.renameSync(upd,path.join(upd,fileName))
     })
     res.render('pages/admin', { title: 'Admin page' })
 })
@@ -48,9 +48,6 @@ router.post('/upload', async (req, res, next) => {
 module.exports = router
 
 
-// if (err) {
-//     return next(err)
-// }
 // const picName = path.join(upd,files.name)
 // console.log(picName)
 // await rename(files.path, picName)
