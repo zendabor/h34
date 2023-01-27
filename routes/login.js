@@ -3,7 +3,7 @@ const router = express.Router()
 const db = require("../DB")
 
 router.get('/', (req, res, next) => {
-  res.render('pages/login', { title: 'SigIn page'})
+  res.render('pages/login', { title: 'SigIn page',msglogin:req.flash('login')[0]})
 })
 
 router.post('/', (req, res, next) => {
@@ -13,7 +13,8 @@ router.post('/', (req, res, next) => {
     db.get("Auth").value().email = req.body.email;
     db.get("Auth").value().password = req.body.password;
     db.write();
-    res.render('pages/login', { title: 'SigIn page',msgemail:req.flash('login', "вы успешно добавлены в базу данных,авторизуйтесь пожалуйста снова")})
+    req.flash('login','вы успешно добавлены в базу данных,авторизуйтесь пожалуйста снова')
+    res.redirect('/login')
   }
 })
 

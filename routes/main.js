@@ -7,7 +7,7 @@ const info = {
   products:db.get('products').value()
 }
 router.get('/', (req, res, next) => {
-  res.render('pages/index', { title: 'Main page', ...info ,msgemail:req.flash('mail')})
+  res.render('pages/index', { title: 'Main page', ...info ,msgemail:req.flash('mail')[0]})
 })
 
 router.post('/', async(req, res, next) => {
@@ -22,7 +22,7 @@ router.post('/', async(req, res, next) => {
     },
   });
   try{
-    const info = await transporter.sendMail({
+     await transporter.sendMail({
       from: req.body.email,
       to: "мое_мыло@mыло.сру",
       subject: req.body.name,
@@ -31,9 +31,14 @@ router.post('/', async(req, res, next) => {
   }catch(e){
     if(e) throw e.message
   }
-  req.flash('mail',`здравствуйте ${req.body.name} с вашего мыла
-  ${req.body.email} было отправлено письмо с текстом ${req.body.message}`)
-  res.render('pages/index')
+  if(req.body.email && req.body.name && req.body.message){
+    req.flash('mail',`здравствуйте ${req.body.name} с вашего мыла ${req.body.email} было отправлено письмо с текстом ${req.body.message}`)
+    res.redirect('/#mail')
+  }else {
+    req.flash('mail'," поля заполнены не корректно или ваше письмо не удалось отправить")
+    res.redirect('/#mail')
+  }
+
 })
 
 module.exports = router

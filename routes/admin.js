@@ -10,16 +10,22 @@ const db = require('../DB')
 
 router.get('/', (req, res, next) => {
 
-  res.render('pages/admin', {title: 'Admin page'})
+  res.render('pages/admin', {title: 'Admin page',msgskill: req.flash('data')[0],msgfile:req.flash('file')[0]})
 })
 
 router.post('/skills',  async (req, res, next) => {
-    db.get('skills').value()[0].number = req.body.age;
-    db.get('skills').value()[1].number = req.body.concerts;
-    db.get('skills').value()[2].number = req.body.cities;
-    db.get('skills').value()[3].number = req.body.years;
-    db.write()
-    res.render('pages/admin',{ title: 'Admin page',msgskill: req.flash('Ваши данные обновлены')})
+    if(req.body.years || req.body.age || req.body.concerts || req.body.cities){
+        db.get('skills').value()[0].number = req.body.age;
+        db.get('skills').value()[1].number = req.body.concerts;
+        db.get('skills').value()[2].number = req.body.cities;
+        db.get('skills').value()[3].number = req.body.years;
+        db.write()
+        req.flash('data',"данные обновлены")
+        res.redirect('/admin')
+    }else {
+        req.flash('data',"что-то пошло не так или вы не внесли изменений" )
+        res.redirect('/admin')
+    }
 })
 
 router.post('/upload', async (req, res, next) => {
@@ -44,9 +50,15 @@ router.post('/upload', async (req, res, next) => {
             }
         }
     });
-    db.get('products').value().push({src: fileN.fileName,name:fileN.name,price:fileN.price})
-    db.write()
-    res.render('pages/admin', { title: 'Admin page',msgfile: req.flash('Ваши данные сохранены')});
+    if(req.body.photo && req.body.name && req.body.price){
+        db.get('products').value().push({src: fileN.fileName,name:fileN.name,price:fileN.price})
+        db.write()
+        req.flash('file',"данные успешно загружены")
+        res.redirect('/admin');
+    }else {
+        req.flash('file',"чет пошло не так")
+        res.redirect('/admin');
+    }
 })
 
 module.exports = router
