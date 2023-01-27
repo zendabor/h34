@@ -1,1 +1,71 @@
-{"skills":[{"number":"432432","text":"Возраст начала занятий на скрипке"},{"number":"42342","text":"Концертов отыграл"},{"number":"23","text":"Максимальное число городов в туре"},{"number":"3","text":"Лет на сцене в качестве скрипача"}],"products":[{"src":"./assets/img/products/Work1.jpg","name":"Вино вдохновение","price":600},{"src":"./assets/img/products/Work2.jpg","name":"Вино вдохновение","price":600},{"src":"./assets/img/products/Work3.jpg","name":"Вино вдохновение","price":600},{"src":"./assets/img/products/Work4.jpg","name":"Вино вдохновение","price":600},{"src":"./assets/img/products/Work5.jpg","name":"Вино вдохновение","price":600},{"src":"./assets/img/products/Work6.jpg","name":"Вино вдохновение","price":600},{"src":"./assets/img/products/Work7.jpg","name":"Вино вдохновение","price":600},{"src":"./assets/img/products/Work8.jpg","name":"Вино вдохновение","price":600},{"src":"./assets/img/products/Work9.jpg","name":"Вино вдохновение","price":600}]}
+{
+  "skills": [
+    {
+      "number": "1",
+      "text": "Возраст начала занятий на скрипке"
+    },
+    {
+      "number": "1",
+      "text": "Концертов отыграл"
+    },
+    {
+      "number": "1",
+      "text": "Максимальное число городов в туре"
+    },
+    {
+      "number": "1",
+      "text": "Лет на сцене в качестве скрипача"
+    }
+  ],
+  "products": [
+    {
+      "src": "./assets/img/products/Work1.jpg",
+      "name": "Вино вдохновение",
+      "price": 600
+    },
+    {
+      "src": "./assets/img/products/Work2.jpg",
+      "name": "Вино вдохновение",
+      "price": 600
+    },
+    {
+      "src": "./assets/img/products/Work3.jpg",
+      "name": "Вино вдохновение",
+      "price": 600
+    },
+    {
+      "src": "./assets/img/products/Work4.jpg",
+      "name": "Вино вдохновение",
+      "price": 600
+    },
+    {
+      "src": "./assets/img/products/Work5.jpg",
+      "name": "Вино вдохновение",
+      "price": 600
+    },
+    {
+      "src": "./assets/img/products/Work6.jpg",
+      "name": "Вино вдохновение",
+      "price": 600
+    },
+    {
+      "src": "./assets/img/products/Work7.jpg",
+      "name": "Вино вдохновение",
+      "price": 600
+    },
+    {
+      "src": "./assets/img/products/Work8.jpg",
+      "name": "Вино вдохновение",
+      "price": 600
+    },
+    {
+      "src": "./assets/img/products/Work9.jpg",
+      "name": "Вино вдохновение",
+      "price": 600
+    }
+  ],
+  "Auth": {
+    "email": "",
+    "password": ""
+  }
+}

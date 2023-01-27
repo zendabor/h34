@@ -1,33 +1,25 @@
 const express = require('express');
 const router = express.Router();
-const {readFile,writeFile,mkdir,rename} = require("fs/promises");
+const {mkdir,rename} = require("fs/promises");
 const fs = require('fs')
 const path = require("path");
 const formidable = require('formidable')
-
+const db = require('../DB')
 
 
 
 router.get('/', (req, res, next) => {
-  // TODO: Реализовать, подстановку в поля ввода формы 'Счетчики'
-    // я не буду это делать, можете не засчитывать выполнение дз, но я манал этот чертов паг с его хреновой табуляцией
-    // я пытался добавить в паг значения из скилов и он без конца ругался на отступы, стоило их добавить
-    // как он просто отказывался видеть уже обьект и просто рендерил страницу без инпутов
-    // как его дебажить я даже гуглить не хочу,настолько не удобная хрень,что нет никакого желания
-  res.render('pages/admin', { title: 'Admin page' })
+
+  res.render('pages/admin', {title: 'Admin page'})
 })
 
 router.post('/skills',  async (req, res, next) => {
-    const file = path.join(process.cwd(), 'data.json');
-    const json1 = await readFile(file,'utf-8');
-    const json2 = await JSON.parse(json1);
-    json2.skills[0].number = req.body.age;
-    json2.skills[1].number = req.body.concerts;
-    json2.skills[2].number = req.body.cities;
-    json2.skills[3].number = req.body.years;
-    const json3 = JSON.stringify(json2);
-    await writeFile(file, json3);
-    res.render('pages/admin', { title: 'Admin page' })
+    db.get('skills').value()[0].number = req.body.age;
+    db.get('skills').value()[1].number = req.body.concerts;
+    db.get('skills').value()[2].number = req.body.cities;
+    db.get('skills').value()[3].number = req.body.years;
+    db.write()
+    res.render('pages/admin',{ title: 'Admin page',msgskill: req.flash('Ваши данные обновлены')})
 })
 
 router.post('/upload', async (req, res, next) => {
@@ -48,17 +40,13 @@ router.post('/upload', async (req, res, next) => {
             });
         }catch (err){
             if (err){
-                throw err.message
+                reject(err.message)
             }
         }
     });
-    const filej = path.join(process.cwd(), 'data.json');
-    const json1 = await readFile(filej, 'utf-8');
-    const json2 = await JSON.parse(json1);
-    json2.products.push({src: path.join('./uploads',`./${fileN.fileName}`),name:fileN.name,price:fileN.price});
-    const json3 = JSON.stringify(json2);
-    await writeFile(filej, json3);
-    res.render('pages/admin', { title: 'Admin page' });
+    db.get('products').value().push({src: fileN.fileName,name:fileN.name,price:fileN.price})
+    db.write()
+    res.render('pages/admin', { title: 'Admin page',msgfile: req.flash('Ваши данные сохранены')});
 })
 
 module.exports = router

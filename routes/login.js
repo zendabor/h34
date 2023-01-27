@@ -1,15 +1,20 @@
 const express = require('express')
 const router = express.Router()
+const db = require("../DB")
 
 router.get('/', (req, res, next) => {
-  res.render('pages/login', { title: 'SigIn page' })
+  res.render('pages/login', { title: 'SigIn page'})
 })
 
 router.post('/', (req, res, next) => {
-  // TODO: Реализовать функцию входа в админ панель по email и паролю
-  // мне влом делать тут проверку почты и пароля,тем более я обычно делаю это на фронте,
-  // ясен фиг это и на беке надо делать, но нафиг паг
-  res.redirect('/admin')
+  if(db.get("Auth").value().email === req.body.email.trim() && db.get("Auth").value().password === req.body.password.trim()){
+    res.redirect('/admin')
+  }else {
+    db.get("Auth").value().email = req.body.email;
+    db.get("Auth").value().password = req.body.password;
+    db.write();
+    res.render('pages/login', { title: 'SigIn page',msgemail:req.flash('login', "вы успешно добавлены в базу данных,авторизуйтесь пожалуйста снова")})
+  }
 })
 
 module.exports = router

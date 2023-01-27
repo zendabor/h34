@@ -2,10 +2,17 @@ const createError = require('http-errors')
 const express = require('express')
 const path = require('path')
 const logger = require('morgan')
-
+const flash = require('connect-flash');
+const cookieParser = require('cookie-parser')
+const session = require('express-session')
 const mainRouter = require('./routes/')
 
 const app = express()
+
+  app.use(cookieParser());
+  app.use(session({resave:true,saveUninitialized:true,secret:'fff', cookie: { maxAge: 60000 }}));
+  app.use(flash());
+
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'))
@@ -18,7 +25,8 @@ process.env.NODE_ENV === 'development'
 app.use(express.json())
 app.use(express.urlencoded({ extended: false }))
 
-app.use(express.static(path.join(__dirname, 'public')))
+app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.static(path.join(__dirname, 'uploads')));
 
 app.use('/', mainRouter)
 
